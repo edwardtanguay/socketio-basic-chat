@@ -39,6 +39,9 @@
 		#messages li:nth-child(odd) {
 			background: #eee;
 		}
+		button {
+			margin-left: 10px;
+		}
 	</style>
 </head>
 
@@ -69,12 +72,17 @@
 	</div>
 	<script>
 		const socket = io();
-		socket.on('greeting-from-server', (data) => {
-			console.log(data);
-			socket.emit('greeting-from-client', {
-				greeting: 'Hello Server'
-			});
-		});
+		// socket.on('greeting-from-server', (data) => {
+		// 	console.log(data);
+		// 	socket.emit('greeting-from-client', {
+		// 		greeting: 'Hello Server'
+		// 	});
+		// });
+
+		const formElem = document.querySelector('form');
+		formElem.onsubmit = () => {
+			alert('ok');
+		};
 	</script>
 </body>
 
