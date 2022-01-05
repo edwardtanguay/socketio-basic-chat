@@ -15,23 +15,24 @@
 	<style>
 		body {
 			background: #333;
+			font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+			width: 600px;
 		}
 
 		form {
 			padding: 20px;
-			position: fixed;
-			bottom: 0;
-			width: 100%;
+			width: 500px;
 			padding-right: 50px;
+			margin: 0 auto;
 		}
 
 		#messages {
 			list-style-type: none;
-			margin: 40px auto 0 auto;
+			margin: 0 auto 0 auto;
 			padding: 0;
 			width: 500px;
-			height: 100px;
-			border: 1px solid #ccc;
+			height: 200px;
+			border: 1px solid #fff;
 			overflow-y: auto;
 			background: #222;
 		}
@@ -41,7 +42,7 @@
 		}
 
 		#messages li:nth-child(odd) {
-			background: #bbb;
+			background: #aaa;
 		}
 
 		#messages li:nth-child(even) {
@@ -50,6 +51,7 @@
 
 		#message {
 			background: #999;
+			width: 429px;
 		}
 
 		button {
@@ -61,7 +63,19 @@
 			width: 500px;
 			margin: 5px auto 5px auto;
 			font-style: italic;
-			font-size: .9rem;
+			font-size: 1.1rem;
+		}
+
+		h1 {
+			margin: 20px auto 10px auto !important;
+			color: #aaa;
+			width: 500px !important;
+			font-size: 2.5rem;
+		}
+		.formrow {
+			display: flex;
+			margin: 0 auto;
+			width: 500px;
 		}
 	</style>
 </head>
@@ -69,26 +83,24 @@
 <body>
 	<div class="container-fluid">
 		<div class="row">
+			<h1>Chat Box</h1>
 			<ul id="messages">
-				<li>Welcome, start chatting.</li>
 			</ul>
-			<div class="quote">Testing Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ducimus veniam quas repellat rem est sequi dolore neque accusantium nulla voluptas velit sint iste, soluta, odio dolorem, eligendi dolores voluptate quibusdam.</div>
+			<div class="quote"></div>
 		</div>
 		<div class="row">
-			<div class="col-lg-6">
-				<form action="">
-					<div class="input-group">
-						<input id="message"
-							   autocomplete="off"
-							   type="text"
-							   class="form-control">
-						<span class="input-group-btn">
-							<button class="btn btn-secondary"
-									type="submit">Send</button>
-						</span>
-					</div>
-				</form>
-			</div>
+			<form action="">
+				<div class="formrow">
+					<input id="message"
+						   autocomplete="off"
+						   type="text"
+						   class="form-control">
+					<span class="input-group-btn">
+						<button class="btn btn-secondary"
+								type="submit">Send</button>
+					</span>
+				</div>
+			</form>
 		</div>
 	</div>
 	<script>
@@ -96,6 +108,24 @@
 		const formElem = document.querySelector('form');
 		const messageElem = document.querySelector('#message');
 		const messagesElem = document.querySelector('#messages');
+		const quoteElem = document.querySelector('.quote');
+		messageElem.focus();
+
+		function fadeIn(el, time) {
+			el.style.opacity = 0;
+
+			var last = +new Date();
+			var tick = function () {
+				el.style.opacity = +el.style.opacity + (new Date() - last) / time;
+				last = +new Date();
+
+				if (+el.style.opacity < 1) {
+					(window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 16);
+				}
+			};
+
+			tick();
+		}
 
 		formElem.onsubmit = (e) => {
 			e.preventDefault();
@@ -108,8 +138,13 @@
 			const li = document.createElement('li');
 			li.appendChild(document.createTextNode(data));
 			messagesElem.appendChild(li);
-			// window.scrollTo(0,document.body.scrollHeight);
 			messagesElem.scrollTop = messagesElem.scrollHeight;
+			messageElem.focus();
+		});
+
+		socket.on('quote', (data) => {
+			quoteElem.innerText = `"${data}"`;
+			fadeIn(quoteElem, 2000);
 		});
 	</script>
 </body>
