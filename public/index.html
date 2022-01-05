@@ -39,6 +39,7 @@
 		#messages li:nth-child(odd) {
 			background: #eee;
 		}
+
 		button {
 			margin-left: 10px;
 		}
@@ -48,19 +49,16 @@
 <body>
 	<div class="container-fluid">
 		<div class="row">
-			<ul class="messages">
-
-			</ul>
+			<ul id="messages"></ul>
 		</div>
 		<div class="row">
 			<div class="col-lg-6">
 				<form action="">
 					<div class="input-group">
-						<input id="m"
+						<input id="message"
 							   autocomplete="off"
 							   type="text"
-							   class="form-control"
-							   placeholder="Message...">
+							   class="form-control">
 						<span class="input-group-btn">
 							<button class="btn btn-secondary"
 									type="submit">Send</button>
@@ -80,9 +78,23 @@
 		// });
 
 		const formElem = document.querySelector('form');
-		formElem.onsubmit = () => {
-			alert('ok');
+		const messageElem = document.querySelector('#message');
+		const messagesElem = document.querySelector('#messages');
+		console.log(messageElem);
+		formElem.onsubmit = (e) => {
+			e.preventDefault();
+			socket.emit('message', messageElem.value);
+			messageElem.value = '';
 		};
+		// socket.on('reminder', (data) => {
+		// 	console.log(data);
+		// });
+
+		socket.on('message', (data) => {
+			const li = document.createElement('li');
+			li.appendChild(document.createTextNode(data));
+			messagesElem.appendChild(li);
+		});
 	</script>
 </body>
 

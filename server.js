@@ -14,13 +14,23 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
+	
 	console.log('user connected');
-	socket.emit('greeting-from-server', {
-		greeting: 'you loaded the page'
-	});
-	socket.on('greeting-from-client', (data) => {
+	
+	// setInterval(() => {
+	// 	socket.emit('reminder', {
+	// 		greeting: 'this is a reminder ' + Math.random() 
+	// 	});
+	// }, 1000);
+
+	// socket.on('greeting', (data) => {
+	// 	console.log(data);
+	// });
+
+	socket.on('message', (data) => {
 		console.log(data);
-	})
+		io.emit('message', data);	
+	});
 })
 
 server.listen(PORT, () => {
