@@ -18,11 +18,11 @@ io.on('connection', (socket) => {
 	socket.emit('greeting-from-server', {
 		greeting: 'you loaded the page'
 	});
-	socket.broadcast.emit('server-broadcast-message', {
-		greeting: 'NEW CLIENT CONNNECTED '
-	});
+	socket.on('greeting-from-client', (data) => {
+		console.log(data);
+	})
 })
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
 	console.log(`listening on port http://localhost:${PORT}`);
 })
